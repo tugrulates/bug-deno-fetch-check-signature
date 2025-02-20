@@ -1,0 +1,51 @@
+name: CI
+
+on: [push]
+
+permissions: {}
+
+jobs:
+  bug:
+    strategy:
+      matrix:
+        version: [
+          2.2.0,                                     # fail
+          33bccf9090e8764790be84e56fe0988600ffe31a,  # fail: perf(check): use v8 code cache for extension sources in deno check (#28089)
+          a2afae46b616e9ca087ce09539a56c2fc159f49d,  # fail
+          23540c2825ddf838444279a394909d0888bd3dcb,  # fail: refactor: remove tsc snapshot (#28056)
+          07410d19cf30d102f7aa1874c4f716934d0d0137,  # pass
+          b9183c737ffe727b24c141bb0ffb13df39ed126b,  # pass
+          a5a1cce50d7c48a373ac2381b309e253601a2321,  # pass: feat(ext/cache): support lscache (#27628)
+          2.1.10                                     # pass
+          ]
+      fail-fast: false
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: ${{ matrix.version }}
+
+      - name: Check
+        run: |
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts &&
+          deno check -r bug.ts
